@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RG Language Compiler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="compiler-container">
+        <header class="compiler-header">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <h1>RG Compiler</h1>
+            </div>
+            <div class="controls">
+                <button id="compileBtn" class="btn compile-btn">
+                    <i class="fas fa-play"></i> Run
+                </button>
+                <button id="clearBtn" class="btn clear-btn">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+                <button id="manualBtn" class="btn manual-btn">
+                    <i class="fas fa-book"></i> Manual
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="editor-output-container">
+                <div class="editor-section">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="window-controls">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span class="file-name">main.rg</span>
+                        </div>
+                        <textarea id="sourceCode" spellcheck="false" class="code-input">RG int x = 5;
+RG int y = 10;
+RG int sum = x + y;
+RG_Print("The sum is:", sum);</textarea>
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <div class="output-header">
+                        <i class="fas fa-terminal"></i>
+                        <h3>Output</h3>
+                    </div>
+                    <div id="output" class="output-content"></div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-panel" id="tokens">
+                        <div class="panel-header">
+                            <i class="fas fa-tags"></i>
+                            <h3>Tokens</h3>
+                        </div>
+                        <div class="panel-content"></div>
+                    </div>
+                    <div class="info-panel" id="assembly">
+                        <div class="panel-header">
+                            <i class="fas fa-microchip"></i>
+                            <h3>Assembly</h3>
+                        </div>
+                        <div class="panel-content"></div>
+                    </div>
+                    <div class="info-panel" id="symbols">
+                        <div class="panel-header">
+                            <i class="fas fa-table"></i>
+                            <h3>Symbol Table</h3>
+                        </div>
+                        <div class="panel-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-container" id="manualPanel">
+                <button class="close-manual" id="closeManualBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="manual-content">
+                    <!-- Manual content here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/lexer.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/semantic.js"></script>
+    <script src="js/compiler.js"></script>
+    <script>
+        // Toggle manual panel
+        const manualBtn = document.getElementById('manualBtn');
+        const manualPanel = document.getElementById('manualPanel');
+        const closeManualBtn = document.getElementById('closeManualBtn');
+        
+        manualBtn.addEventListener('click', function() {
+            manualPanel.classList.toggle('active');
+        });
+        
+        closeManualBtn.addEventListener('click', function() {
+            manualPanel.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
