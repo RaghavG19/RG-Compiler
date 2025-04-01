@@ -7,6 +7,14 @@ class Lexer {
             { type: 'FLOAT_KEYWORD', pattern: /^float\b/ },
             { type: 'BOOL_KEYWORD', pattern: /^bool\b/ },
 
+            // Control flow keywords (must come before IDENTIFIER)
+            { type: 'IF', pattern: /^if\b/ },
+            { type: 'ELSE', pattern: /^else\b/ },
+            { type: 'WHILE', pattern: /^while\b/ },
+            { type: 'FOR', pattern: /^for\b/ },
+            { type: 'BREAK', pattern: /^break\b/ },
+            { type: 'CONTINUE', pattern: /^continue\b/ },
+
             // Built-in functions (must come before IDENTIFIER)
             { type: 'PRINT', pattern: /^RG_Print\b/ },
 
