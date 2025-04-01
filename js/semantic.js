@@ -1,20 +1,9 @@
 class SemanticAnalyzer {
     constructor() {
-        // Initialize symbol table with built-in functions
         this.symbolTable = {
             __output__: [],
-            __assembly__: [],
-
-            // Math functions
-            sqrt: { type: 'function', returnType: 'float' },
-            pow: { type: 'function', returnType: 'float' },
-            sin: { type: 'function', returnType: 'float' },
-            cos: { type: 'function', returnType: 'float' },
-            tan: { type: 'function', returnType: 'float' },
-            log: { type: 'function', returnType: 'float' },
-            factorial: { type: 'function', returnType: 'int' }
+            __assembly__: []
         };
-
         this.varCount = 0;   // Keeps track of available registers
         this.labelCount = 0; // Keeps track of labels for branching
         this.loopStack = []; // Stack to keep track of current loop for break statements
@@ -206,11 +195,27 @@ class SemanticAnalyzer {
         this.symbolTable.__assembly__.push(`; Print statement`);
         const args = node.args.map(arg => {
             const value = this.visitExpression(arg);
+
+            // Format the value for assembly
+            let formattedValue;
+            if (typeof value === 'boolean') {
+                formattedValue = value ? 'true' : 'false';
+            } else if (typeof value === 'string') {
+                // Remove quotes for display in output
+                formattedValue = value.replace(/^"|"$/g, '');
+            } else {
+                formattedValue = value;
+            }
+
             this.symbolTable.__assembly__.push(`PUSH ${value}`);
-            return typeof value === 'number' ? value.toString() : value;
+            return formattedValue;
         });
+
         this.symbolTable.__assembly__.push(`CALL PRINT`);
-        this.symbolTable.__output__.push(args.join(' '));
+
+        // Add to output with proper formatting
+        const outputLine = args.join(' ');
+        this.symbolTable.__output__.push(outputLine);
     }
     
     visitIfStatement(node) {
@@ -229,16 +234,18 @@ class SemanticAnalyzer {
         this.symbolTable.__assembly__.push(`CMP R${this.varCount-1}, 0`);
         this.symbolTable.__assembly__.push(`JE ${elseLabel}`);
 
-        // Then branch
+        // Then branch - only execute if condition is true
         this.symbolTable.__assembly__.push(`; Then branch`);
-        for (const stmt of node.thenBranch) {
-            this.visitStatement(stmt);
+        if (boolCondition) {
+            for (const stmt of node.thenBranch) {
+                this.visitStatement(stmt);
+            }
         }
         this.symbolTable.__assembly__.push(`JMP ${endLabel}`);
 
-        // Else branch
+        // Else branch - only execute if condition is false
         this.symbolTable.__assembly__.push(`${elseLabel}:`);
-        if (node.elseBranch) {
+        if (node.elseBranch && !boolCondition) {
             this.symbolTable.__assembly__.push(`; Else branch`);
             if (Array.isArray(node.elseBranch)) {
                 for (const stmt of node.elseBranch) {
@@ -419,10 +426,10 @@ class SemanticAnalyzer {
                 return this.visitUnaryExpression(node);
             case 'AssignmentExpression':
                 return this.visitAssignmentExpression(node);
+            case 'ArrayAssignmentExpression':
+                return this.visitArrayAssignmentExpression(node);
             case 'MathFunction':
                 return this.visitMathFunction(node);
-            case 'FunctionCall':
-                return this.visitFunctionCall(node);
             default:
                 throw new Error(`Unknown expression type: ${node.type}`);
         }
@@ -621,132 +628,6 @@ class SemanticAnalyzer {
         return node.value;
     }
 
-    visitFunctionCall(node) {
-        const funcName = node.name;
-
-        // Check if the function exists
-        if (!this.symbolTable[funcName]) {
-            throw new Error(`Undefined function '${funcName}'`);
-        }
-
-        if (this.symbolTable[funcName].type !== 'function') {
-            throw new Error(`'${funcName}' is not a function`);
-        }
-
-        // Evaluate arguments
-        const args = node.args.map(arg => this.visitExpression(arg));
-
-        // Handle built-in math functions
-        switch (funcName) {
-            case 'sqrt': {
-                if (args.length !== 1) {
-                    throw new Error(`sqrt() requires exactly 1 argument, got ${args.length}`);
-                }
-                if (args[0] < 0) {
-                    throw new Error(`Cannot take square root of negative number: ${args[0]}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate square root`);
-                this.symbolTable.__assembly__.push(`SQRT R${this.varCount}, ${args[0]}`);
-                this.varCount++;
-
-                return Math.sqrt(args[0]);
-            }
-
-            case 'pow': {
-                if (args.length !== 2) {
-                    throw new Error(`pow() requires exactly 2 arguments, got ${args.length}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate power`);
-                this.symbolTable.__assembly__.push(`POW R${this.varCount}, ${args[0]}, ${args[1]}`);
-                this.varCount++;
-
-                return Math.pow(args[0], args[1]);
-            }
-
-            case 'sin': {
-                if (args.length !== 1) {
-                    throw new Error(`sin() requires exactly 1 argument, got ${args.length}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate sine`);
-                this.symbolTable.__assembly__.push(`SIN R${this.varCount}, ${args[0]}`);
-                this.varCount++;
-
-                return Math.sin(args[0]);
-            }
-
-            case 'cos': {
-                if (args.length !== 1) {
-                    throw new Error(`cos() requires exactly 1 argument, got ${args.length}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate cosine`);
-                this.symbolTable.__assembly__.push(`COS R${this.varCount}, ${args[0]}`);
-                this.varCount++;
-
-                return Math.cos(args[0]);
-            }
-
-            case 'tan': {
-                if (args.length !== 1) {
-                    throw new Error(`tan() requires exactly 1 argument, got ${args.length}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate tangent`);
-                this.symbolTable.__assembly__.push(`TAN R${this.varCount}, ${args[0]}`);
-                this.varCount++;
-
-                return Math.tan(args[0]);
-            }
-
-            case 'log': {
-                if (args.length !== 1) {
-                    throw new Error(`log() requires exactly 1 argument, got ${args.length}`);
-                }
-                if (args[0] <= 0) {
-                    throw new Error(`Cannot take logarithm of non-positive number: ${args[0]}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate logarithm`);
-                this.symbolTable.__assembly__.push(`LOG R${this.varCount}, ${args[0]}`);
-                this.varCount++;
-
-                return Math.log(args[0]);
-            }
-
-            case 'factorial': {
-                if (args.length !== 1) {
-                    throw new Error(`factorial() requires exactly 1 argument, got ${args.length}`);
-                }
-                if (!Number.isInteger(args[0]) || args[0] < 0) {
-                    throw new Error(`Factorial requires a non-negative integer: ${args[0]}`);
-                }
-
-                this.symbolTable.__assembly__.push(`; Calculate factorial`);
-                this.symbolTable.__assembly__.push(`MOV R${this.varCount}, 1`);
-
-                if (args[0] === 0 || args[0] === 1) {
-                    this.varCount++;
-                    return 1;
-                }
-
-                let result = 1;
-                for (let i = 2; i <= args[0]; i++) {
-                    result *= i;
-                    this.symbolTable.__assembly__.push(`MUL R${this.varCount}, R${this.varCount}, ${i}`);
-                }
-
-                this.varCount++;
-                return result;
-            }
-
-            default:
-                throw new Error(`Unknown function: ${funcName}`);
-        }
-    }
-
     visitIdentifier(node) {
         // Handle built-in functions
         if (node.name === 'RG_Print') {
@@ -754,7 +635,12 @@ class SemanticAnalyzer {
             return 'RG_Print';
         }
 
-        // Check if the identifier exists in the symbol table
+        // Handle control flow keywords - these should never be treated as variables
+        const controlFlowKeywords = ['if', 'else', 'while', 'for', 'break', 'continue'];
+        if (controlFlowKeywords.includes(node.name)) {
+            throw new Error(`'${node.name}' is a control flow keyword and cannot be used as a variable`);
+        }
+
         if (!this.symbolTable[node.name]) {
             throw new Error(`Undefined variable '${node.name}'`);
         }
@@ -765,7 +651,6 @@ class SemanticAnalyzer {
             return node.name;
         }
 
-        // Handle regular variables
         // Debug output
         this.symbolTable.__assembly__.push(`; Loading variable ${node.name} with value ${this.symbolTable[node.name].value}`);
         this.symbolTable.__assembly__.push(`LOAD R${this.varCount}, [${node.name}]`);
@@ -889,7 +774,14 @@ class SemanticAnalyzer {
 
             case '>=':
                 this.symbolTable.__assembly__.push(`GE R${this.varCount}, R${this.varCount-2}, R${this.varCount-1}`);
-                this.varCount++;
+                // Handle control flow keywords - these should never be treated as variables
+        // This is a safety check in case they appear in expressions
+        const controlFlowKeywords = ['if', 'else', 'while', 'for', 'break', 'continue'];
+        if (controlFlowKeywords.includes(node.name)) {
+            throw new Error(`'${node.name}' is a control flow keyword and cannot be used as a variable`);
+        }
+
+        this.varCount++;
                 return left >= right;
 
             case '==':
