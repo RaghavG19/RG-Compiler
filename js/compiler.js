@@ -316,6 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error.message.includes('Undefined variable')) {
                 const varName = error.message.split("'")[1];
                 errorMessage += `\n\nSuggestion: Make sure to declare the variable '${varName}' before using it. Example:\nRG int ${varName} = 0;`;
+            } else if (error.message.includes('Variable') && error.message.includes('already declared')) {
+                const varName = error.message.split("'")[1];
+                errorMessage += `\n\nSuggestion: The variable '${varName}' is already declared. Use a different variable name or remove the duplicate declaration.`;
             } else if (error.message.includes('Expected type keyword')) {
                 errorMessage += `\n\nSuggestion: All variable declarations must start with 'RG' followed by a type (int, float, bool). Example:\nRG int x = 10;`;
             } else if (error.message.includes('Expect expression')) {
@@ -376,36 +379,104 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sample code button
     sampleBtn.addEventListener('click', () => {
         // Provide a simple but comprehensive example of RG language
-        sourceCodeEl.value = `// Basic variable declarations
+        sourceCodeEl.value = `// RG Advanced Calculator Example
+
+// ===== Basic Variable Declarations =====
+RG_Print("===== Basic Variable Declarations =====");
 RG int x = 10;
+RG int y = 5;
 RG float pi = 3.14159;
-RG bool isValid = true;
+RG bool isTrue = true;
+RG bool isFalse = false;
 
-// Simple calculation
-RG int sum = x + 5;
-RG float area = pi * x * x;
+RG_Print("x =", x);
+RG_Print("y =", y);
+RG_Print("pi =", pi);
+RG_Print("isTrue =", isTrue);
+RG_Print("isFalse =", isFalse);
 
-// Print output
-RG_Print("Value of x is:", x);
-RG_Print("Area of circle with radius", x, "is", area);
+// ===== Array Operations =====
+RG_Print("\n===== Array Operations =====");
+RG int[5] numbers = 0;  // Initialize array of size 5 with all zeros
+numbers[0] = 10;
+numbers[1] = 20;
+numbers[2] = 30;
+numbers[3] = 40;
+numbers[4] = 50;
 
-// Conditional statement
-if (isValid) {
-    RG_Print("Condition is true");
+RG_Print("Array elements:");
+RG_Print("numbers[0] =", numbers[0]);
+RG_Print("numbers[1] =", numbers[1]);
+RG_Print("numbers[2] =", numbers[2]);
+RG_Print("numbers[3] =", numbers[3]);
+RG_Print("numbers[4] =", numbers[4]);
+
+// Array operations in expressions
+RG int sum_of_elements = numbers[0] + numbers[1] + numbers[2];
+RG_Print("Sum of first three elements:", sum_of_elements);
+
+// ===== Simple Calculations =====
+RG_Print("\n===== Simple Calculations =====");
+RG int sum = x + y;
+RG int difference = x - y;
+RG int product = x * y;
+RG int quotient = x / y;
+RG int remainder = x % y;
+
+RG_Print("sum = x + y =", sum);
+RG_Print("difference = x - y =", difference);
+RG_Print("product = x * y =", product);
+RG_Print("quotient = x / y =", quotient);
+RG_Print("remainder = x % y =", remainder);
+
+// ===== Conditional Logic =====
+RG_Print("\n===== Conditional Logic =====");
+if (x > y) {
+    RG_Print("x is greater than y");
+} else if (x < y) {
+    RG_Print("x is less than y");
 } else {
-    RG_Print("Condition is false");
+    RG_Print("x is equal to y");
 }
 
-// Loop example
-RG int i = 0;
+// More complex conditions
+RG_Print("\n===== Complex Conditions =====");
+if (x > 15) {
+    RG_Print("x is greater than 15");
+} else if (x > 5) {
+    RG_Print("x is between 6 and 15");
+} else {
+    RG_Print("x is 5 or less");
+}
+
+// Boolean logic
+RG_Print("\n===== Boolean Logic =====");
+if (isTrue && isFalse) {
+    RG_Print("Both isTrue AND isFalse are true");
+} else {
+    RG_Print("Either isTrue or isFalse is false");
+}
+
+if (isTrue || isFalse) {
+    RG_Print("Either isTrue OR isFalse is true");
+} else {
+    RG_Print("Both isTrue and isFalse are false");
+}
+
+// ===== Loops =====
+RG_Print("\n===== Loops =====");
+// Factorial calculation
+RG int loop_var = 0;
 RG int factorial = 1;
 
-while (i < x) {
-    i = i + 1;
-    factorial = factorial * i;
+RG_Print("Computing factorial of", x);
+while (loop_var < x) {
+    loop_var = loop_var + 1;
+    factorial = factorial * loop_var;
+    RG_Print("Iteration", loop_var, ":", factorial);
 }
 
-RG_Print("Factorial of", x, "is", factorial);`;
+RG_Print("Final result: factorial of", x, "is", factorial);`;
 
         // Update editor stats
         updateEditorStats();
