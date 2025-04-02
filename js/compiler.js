@@ -1,12 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Setup editor line and column tracking
     const sourceCodeEl = document.getElementById('sourceCode');
-    const lineColEl = document.getElementById('lineCol');
-    const fileSizeEl = document.getElementById('fileSize');
-    const compileStatusEl = document.getElementById('compileStatus');
     const compileBtn = document.getElementById('compileBtn');
     const clearBtn = document.getElementById('clearBtn');
-    const sampleBtn = document.getElementById('sampleBtn');
     const manualBtn = document.getElementById('manualBtn');
     const closeManualBtn = document.getElementById('closeManualBtn');
     const manualPanel = document.getElementById('manualPanel');
@@ -17,23 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEditorStats() {
         const text = sourceCodeEl.value;
-        const position = sourceCodeEl.selectionStart;
-
-        // Calculate line and column
-        let line = 1;
-        let col = 1;
-        for (let i = 0; i < position; i++) {
-            if (text[i] === '\n') {
-                line++;
-                col = 1;
-            } else {
-                col++;
-            }
-        }
-
-        // Update status bar
-        lineColEl.textContent = `Line ${line}, Col ${col}`;
-        fileSizeEl.textContent = `${text.length} chars`;
 
         // Update line numbers
         updateLineNumbers();
@@ -126,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Show loading overlay
             document.getElementById('loadingOverlay').style.display = 'flex';
-            compileStatusEl.textContent = 'Compiling...';
 
             // Clear previous outputs
             outputEl.textContent = '';
@@ -326,7 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (error.message.includes('Missing semicolon')) {
                 errorMessage += `\n\nSuggestion: Add a semicolon at the end of the statement.`;
             }
-
             // Add a code example for reference
             errorMessage += `\n\nExample of valid RG code:\nRG int x = 5;\nRG float y = 3.14;\nRG_Print("The value of x is:", x);`;
 
@@ -334,7 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Switch to errors tab
             document.querySelector('[data-tab="errors"]').click();
-            compileStatusEl.textContent = 'Error';
 
             // Display empty panels for tokens, assembly, and symbols
             tokensEl.innerHTML = '<div class="empty-state">Compilation failed - no tokens available</div>';
@@ -343,18 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             // Hide loading overlay
             document.getElementById('loadingOverlay').style.display = 'none';
-
-            // Update status if no error occurred
-            if (compileStatusEl.textContent === 'Compiling...') {
-                compileStatusEl.textContent = 'Compiled successfully';
-
-                // Reset status after 3 seconds
-                setTimeout(() => {
-                    if (compileStatusEl.textContent === 'Compiled successfully') {
-                        compileStatusEl.textContent = 'Ready';
-                    }
-                }, 3000);
-            }
         }
     });
 
@@ -363,133 +327,13 @@ document.addEventListener('DOMContentLoaded', () => {
         outputEl.textContent = '';
         errorsEl.textContent = '';
         warningsEl.textContent = '';
-
         // Clear panels with empty state messages
         tokensEl.innerHTML = '<div class="empty-state">No tokens - enter code and run the compiler</div>';
         assemblyEl.innerHTML = '<div class="empty-state">No assembly code - enter code and run the compiler</div>';
         symbolsEl.innerHTML = '<div class="empty-state">No symbols - enter code and run the compiler</div>';
-
-        compileStatusEl.textContent = 'Ready';
         updateEditorStats();
-
         // Switch to editor tab
         document.querySelector('[data-tab="output"]').click();
-    });
-
-    // Sample code button
-    sampleBtn.addEventListener('click', () => {
-        // Provide a simple but comprehensive example of RG language
-        sourceCodeEl.value = `// RG Advanced Calculator Example
-
-// ===== Basic Variable Declarations =====
-RG_Print("===== Basic Variable Declarations =====");
-RG int x = 10;
-RG int y = 5;
-RG float pi = 3.14159;
-RG bool isTrue = true;
-RG bool isFalse = false;
-
-RG_Print("x =", x);
-RG_Print("y =", y);
-RG_Print("pi =", pi);
-RG_Print("isTrue =", isTrue);
-RG_Print("isFalse =", isFalse);
-
-// ===== Array Operations =====
-RG_Print("\n===== Array Operations =====");
-RG int[5] numbers = 0;  // Initialize array of size 5 with all zeros
-numbers[0] = 10;
-numbers[1] = 20;
-numbers[2] = 30;
-numbers[3] = 40;
-numbers[4] = 50;
-
-RG_Print("Array elements:");
-RG_Print("numbers[0] =", numbers[0]);
-RG_Print("numbers[1] =", numbers[1]);
-RG_Print("numbers[2] =", numbers[2]);
-RG_Print("numbers[3] =", numbers[3]);
-RG_Print("numbers[4] =", numbers[4]);
-
-// Array operations in expressions
-RG int sum_of_elements = numbers[0] + numbers[1] + numbers[2];
-RG_Print("Sum of first three elements:", sum_of_elements);
-
-// ===== Simple Calculations =====
-RG_Print("\n===== Simple Calculations =====");
-RG int sum = x + y;
-RG int difference = x - y;
-RG int product = x * y;
-RG int quotient = x / y;
-RG int remainder = x % y;
-
-RG_Print("sum = x + y =", sum);
-RG_Print("difference = x - y =", difference);
-RG_Print("product = x * y =", product);
-RG_Print("quotient = x / y =", quotient);
-RG_Print("remainder = x % y =", remainder);
-
-// ===== Conditional Logic =====
-RG_Print("\n===== Conditional Logic =====");
-if (x > y) {
-    RG_Print("x is greater than y");
-} else if (x < y) {
-    RG_Print("x is less than y");
-} else {
-    RG_Print("x is equal to y");
-}
-
-// More complex conditions
-RG_Print("\n===== Complex Conditions =====");
-if (x > 15) {
-    RG_Print("x is greater than 15");
-} else if (x > 5) {
-    RG_Print("x is between 6 and 15");
-} else {
-    RG_Print("x is 5 or less");
-}
-
-// Boolean logic
-RG_Print("\n===== Boolean Logic =====");
-if (isTrue && isFalse) {
-    RG_Print("Both isTrue AND isFalse are true");
-} else {
-    RG_Print("Either isTrue or isFalse is false");
-}
-
-if (isTrue || isFalse) {
-    RG_Print("Either isTrue OR isFalse is true");
-} else {
-    RG_Print("Both isTrue and isFalse are false");
-}
-
-// ===== Loops =====
-RG_Print("\n===== Loops =====");
-// Factorial calculation
-RG int loop_var = 0;
-RG int factorial = 1;
-
-RG_Print("Computing factorial of", x);
-while (loop_var < x) {
-    loop_var = loop_var + 1;
-    factorial = factorial * loop_var;
-    RG_Print("Iteration", loop_var, ":", factorial);
-}
-
-RG_Print("Final result: factorial of", x, "is", factorial);`;
-
-        // Update editor stats
-        updateEditorStats();
-
-        // Show a message
-        compileStatusEl.textContent = 'Sample code loaded';
-
-        // Reset status after 3 seconds
-        setTimeout(() => {
-            if (compileStatusEl.textContent === 'Sample code loaded') {
-                compileStatusEl.textContent = 'Ready';
-            }
-        }, 3000);
     });
 
     // Helper functions for formatting output
