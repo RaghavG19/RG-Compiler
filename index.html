@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/manual.css">
-    <link rel="stylesheet" href="css/manual.css">
 </head>
 <body>
     <div class="compiler-container">
@@ -44,16 +43,196 @@
                         </div>
                         <div class="editor-wrapper">
                             <div class="line-numbers"></div>
-                            <textarea id="sourceCode" spellcheck="false" class="code-input" placeholder="// Enter your RG code here...">RG int x = 5;
-RG int y = 10;
-RG int sum = x + y;
-RG_Print("The sum is:", sum);
+                            <textarea id="sourceCode" spellcheck="false" class="code-input" placeholder="// Enter your RG code here...">// ===== Summation Series with For Loop =====
+RG_Print("\n===== Summation Series with For Loop =====");
 
-// Control flow example
-if (sum > 10) {
-    RG_Print("Sum is greater than 10");
+// Initialize sum variable
+RG int sum_n = 0;
+
+// Declare loop variable outside the loop
+RG int i = 0;
+
+// Using a for loop with assignment instead of declaration
+for (i = 1; i <= 10; i = i + 1) {
+    // Debug output to track the calculation
+    RG_Print("Adding", i, "to sum", sum_n);
+
+    // Add current value of i to sum_n
+    sum_n = sum_n + i;
+
+    // Debug output to show new sum
+    RG_Print("New sum is", sum_n);
+}
+
+// Print the final result
+RG_Print("Sum of numbers from 1 to 10 is", sum_n);
+
+// Test another for loop with the same variable
+RG_Print("\n===== Countdown with For Loop =====");
+for (i = 10; i >= 1; i = i - 1) {
+    RG_Print("Counting down:", i);
+}
+
+// Test with different variable
+RG_Print("\n===== Using Different Variable =====");
+RG int j = 0;
+for (j = 1; j <= 5; j = j + 1) {
+    RG_Print("j =", j);
+}
+
+RG_Print("For loop test completed successfully!");
+
+// Expected result: 1+2+3+4+5+6+7+8+9+10 = 55
+
+// ===== Multiple For Loops =====
+RG_Print("\n===== Multiple For Loops =====");
+
+// Initialize array
+RG int[5] numbers = 0;
+
+// First for loop to fill the array
+for (RG int j = 0; j < 5; j = j + 1) {
+    numbers[j] = j * 10;
+    RG_Print("Set numbers[", j, "] =", numbers[j]);
+}
+
+// Second for loop to calculate sum
+RG int array_sum = 0;
+for (RG int k = 0; k < 5; k = k + 1) {
+    array_sum = array_sum + numbers[k];
+    RG_Print("Added", numbers[k], "to sum, now:", array_sum);
+}
+
+RG_Print("Sum of array elements:", array_sum);
+
+// ===== POW Function Tests =====
+RG_Print("");
+RG_Print("===== POW Function Tests =====");
+RG_Print("pow(2, 3) =", pow(2, 3));
+RG_Print("pow(x, 2) =", pow(x, 2));
+RG_Print("pow(3, 4) =", pow(3, 4));
+RG_Print("pow(5, 0) =", pow(5, 0));
+
+// Store pow results
+RG float pow_result1 = pow(2, 3);
+RG float pow_result2 = pow(x, 2);
+RG_Print("pow_result1 =", pow_result1);
+RG_Print("pow_result2 =", pow_result2);
+
+// ===== SIN Function Tests =====
+RG_Print("");
+RG_Print("===== SIN Function Tests =====");
+RG_Print("sin(0) =", sin(0));
+RG_Print("sin(pi/6) =", sin(pi / 6));  // sin(30 degrees) ≈ 0.5
+RG_Print("sin(pi/2) =", sin(pi / 2));  // sin(90 degrees) = 1
+RG_Print("sin(pi) =", sin(pi));        // sin(180 degrees) = 0
+
+// Store sin results
+RG float sin_result1 = sin(pi / 6);
+RG float sin_result2 = sin(pi / 2);
+RG_Print("sin_result1 =", sin_result1);
+RG_Print("sin_result2 =", sin_result2);
+
+// ===== COS Function Tests =====
+RG_Print("");
+RG_Print("===== COS Function Tests =====");
+RG_Print("cos(0) =", cos(0));          // cos(0 degrees) = 1
+RG_Print("cos(pi/3) =", cos(pi / 3));  // cos(60 degrees) = 0.5
+RG_Print("cos(pi/2) =", cos(pi / 2));  // cos(90 degrees) = 0
+RG_Print("cos(pi) =", cos(pi));        // cos(180 degrees) = -1
+
+// Store cos results
+RG float cos_result1 = cos(pi / 3);
+RG float cos_result2 = cos(pi);
+RG_Print("cos_result1 =", cos_result1);
+RG_Print("cos_result2 =", cos_result2);
+
+// ===== TAN Function Tests =====
+RG_Print("");
+RG_Print("===== TAN Function Tests =====");
+RG_Print("tan(0) =", tan(0));          // tan(0 degrees) = 0
+RG_Print("tan(pi/4) =", tan(pi / 4));  // tan(45 degrees) = 1
+RG_Print("tan(pi/3) =", tan(pi / 3));  // tan(60 degrees) ≈ 1.732
+
+// Store tan results
+RG float tan_result1 = tan(pi / 4);
+RG float tan_result2 = tan(pi / 3);
+RG_Print("tan_result1 =", tan_result1);
+RG_Print("tan_result2 =", tan_result2);
+
+// ===== LOG Function Tests =====
+RG_Print("");
+RG_Print("===== LOG Function Tests =====");
+RG_Print("log(1) =", log(1));          // log(1) = 0
+RG_Print("log(10) =", log(10));        // log(10) ≈ 2.302585
+RG_Print("log(100) =", log(100));      // log(100) ≈ 4.60517
+RG_Print("log(2.718) =", log(2.718));  // log(e) ≈ 1
+
+// Store log results
+RG float log_result1 = log(10);
+RG float log_result2 = log(100);
+RG_Print("log_result1 =", log_result1);
+RG_Print("log_result2 =", log_result2);
+
+// ===== FACTORIAL Function Tests =====
+RG_Print("");
+RG_Print("===== FACTORIAL Function Tests =====");
+RG_Print("factorial(0) =", factorial(0));    // 0! = 1
+RG_Print("factorial(1) =", factorial(1));    // 1! = 1
+RG_Print("factorial(5) =", factorial(5));    // 5! = 120
+RG_Print("factorial(10) =", factorial(10));  // 10! = 3628800
+
+// Store factorial results
+RG int fact_result1 = factorial(5);
+RG int fact_result2 = factorial(10);
+RG_Print("fact_result1 =", fact_result1);
+RG_Print("fact_result2 =", fact_result2);
+
+// Logical operators
+RG_Print("");
+RG_Print("===== Logical Operators =====");
+RG_Print("isTrue =", isTrue, ", isFalse =", isFalse);
+RG_Print("isTrue && isFalse:", isTrue && isFalse);
+RG_Print("isTrue || isFalse:", isTrue || isFalse);
+RG_Print("!isTrue:", !isTrue);
+RG_Print("!isFalse:", !isFalse);
+
+// Comparison operators
+RG_Print("");
+RG_Print("===== Comparison Operators =====");
+RG_Print("x > y:", x > y);
+RG_Print("x < y:", x < y);
+RG_Print("x >= y:", x >= y);
+RG_Print("x <= y:", x <= y);
+RG_Print("x == y:", x == y);
+RG_Print("x != y:", x != y);
+
+// Conditional logic
+RG_Print("");
+RG_Print("===== Conditional Logic =====");
+if (x > y) {
+    RG_Print("x is greater than y");
 } else {
-    RG_Print("Sum is 10 or less");
+    RG_Print("x is less than or equal to y");
+}
+
+// Loop example with while loop
+RG_Print("");
+RG_Print("===== Loop Example =====");
+RG_Print("First 5 Fibonacci numbers:");
+RG int a = 0;
+RG int b = 1;
+RG_Print(a);
+RG_Print(b);
+
+// Using a while loop instead of for loop to avoid variable redeclaration issues
+RG int i = 2;
+while (i < 5) {
+    RG int next = a + b;
+    RG_Print(next);
+    a = b;
+    b = next;
+    i = i + 1;
 }</textarea>
                         </div>
                     </div>
@@ -201,7 +380,14 @@ if (sum > 10) {
                         <li><a href="#functions">Built-in Functions</a></li>
                         <li><a href="#arrays">Arrays</a></li>
                         <li><a href="#examples">Examples</a></li>
-                        <li><a href="#compiler">Using the Compiler</a></li>
+                        <li><a href="#compiler">Using the Compiler</a>
+                            <ul>
+                                <li><a href="#compiler-interface">Compiler Interface</a></li>
+                                <li><a href="#compilation-process">Compilation Process</a></li>
+                                <li><a href="#compiler-features">Compiler Features</a></li>
+                                <li><a href="#compiler-architecture">Compiler Architecture</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
                 <div class="manual-content">
@@ -632,7 +818,7 @@ if (isPrime) {
                     <section id="compiler">
                         <h3>Using the RG Compiler</h3>
 
-                        <h4>Compiler Interface</h4>
+                        <h4 id="compiler-interface">Compiler Interface</h4>
                         <p>The RG compiler provides an integrated development environment with the following components:</p>
                         <ul>
                             <li><strong>Code Editor:</strong> Where you write your RG code</li>
@@ -642,7 +828,7 @@ if (isPrime) {
                             <li><strong>Symbol Table:</strong> Lists all variables and their properties</li>
                         </ul>
 
-                        <h4>Compilation Process</h4>
+                        <h4 id="compilation-process">Compilation Process</h4>
                         <ol>
                             <li><strong>Write Code:</strong> Enter your RG code in the editor</li>
                             <li><strong>Run:</strong> Click the "Run" button to compile and execute your code</li>
@@ -650,7 +836,7 @@ if (isPrime) {
                             <li><strong>Debug:</strong> If there are errors, check the errors panel for details</li>
                         </ol>
 
-                        <h4>Compiler Features</h4>
+                        <h4 id="compiler-features">Compiler Features</h4>
                         <ul>
                             <li><strong>Syntax Highlighting:</strong> Code is colored for better readability</li>
                             <li><strong>Error Reporting:</strong> Detailed error messages help identify issues</li>
@@ -658,6 +844,205 @@ if (isPrime) {
                             <li><strong>Token Analysis:</strong> View the lexical structure of your code</li>
                             <li><strong>Assembly Generation:</strong> See how your code translates to assembly</li>
                         </ul>
+
+                        <h4 id="compiler-architecture">Compiler Architecture</h4>
+                        <p>The RG Compiler is a true compiler that transforms source code into an executable intermediate representation through several phases:</p>
+
+                        <h5>1. Lexical Analysis (Lexer)</h5>
+                        <p>The lexer breaks down the source code into tokens such as keywords, identifiers, literals, and operators. This is the first step in understanding the structure of the program.</p>
+                        <pre><code>// Source: RG int x = 5;
+// Tokens: [RG, int, x, =, 5, ;]</code></pre>
+
+                        <h5>2. Syntax Analysis (Parser)</h5>
+                        <p>The parser analyzes the tokens according to the grammar rules of the RG language and builds an Abstract Syntax Tree (AST) that represents the hierarchical structure of the program.</p>
+                        <pre><code>// AST for x = 5 + 3;
+// AssignmentExpression {
+//   name: "x",
+//   value: BinaryExpression {
+//     left: 5,
+//     operator: "+",
+//     right: 3
+//   }
+// }</code></pre>
+
+                        <h5>3. Semantic Analysis</h5>
+                        <p>This phase checks for semantic errors such as undeclared variables, type mismatches, and invalid operations. It also builds a symbol table to track variables and their properties.</p>
+
+                        <h3>RG Compiler: Detailed Analysis</h3>
+
+                        <p>The RG Compiler project is a comprehensive implementation of a compiler for the RG programming language. Let's analyze the key components and features that make this a true compiler:</p>
+
+                        <h4>1. Compiler Architecture</h4>
+
+                        <p>The project follows the classical compiler architecture with distinct phases:</p>
+
+                        <h5>Lexical Analysis (js/lexer.js)</h5>
+                        <ul>
+                            <li>Implements a tokenizer that breaks source code into tokens</li>
+                            <li>Recognizes keywords, identifiers, literals, operators, and punctuation</li>
+                            <li>Handles token position tracking for error reporting</li>
+                            <li>Example: <code>RG int x = 5;</code> is tokenized into <code>[RG, int, x, =, 5, ;]</code></li>
+                        </ul>
+
+                        <h5>Syntax Analysis (js/parser.js)</h5>
+                        <ul>
+                            <li>Implements a recursive descent parser</li>
+                            <li>Constructs an Abstract Syntax Tree (AST) from tokens</li>
+                            <li>Handles grammar rules for expressions, statements, and declarations</li>
+                            <li>Performs syntax error detection and reporting</li>
+                            <li>Example: Parses <code>x = 5 + 3;</code> into an AST with assignment and binary expression nodes</li>
+                        </ul>
+
+                        <h5>Semantic Analysis (js/semantic.js)</h5>
+                        <ul>
+                            <li>Performs type checking and validation</li>
+                            <li>Builds and maintains a symbol table for variables and their properties</li>
+                            <li>Detects semantic errors like undefined variables or type mismatches</li>
+                            <li>Generates assembly-like intermediate code</li>
+                            <li>Example: Validates that variables are declared before use and operations have compatible types</li>
+                        </ul>
+
+                        <h5>Code Generation (js/codegen.js)</h5>
+                        <ul>
+                            <li>Transforms the AST into target code</li>
+                            <li>Implements code generation for all language constructs</li>
+                            <li>Handles variable declarations, expressions, control flow, and I/O</li>
+                            <li>Example: Generates code for loops, conditionals, and mathematical operations</li>
+                        </ul>
+
+                        <h4>2. Intermediate Code Generation</h4>
+
+                        <p>The compiler generates assembly-like intermediate code:</p>
+
+                        <pre><code>; Declare variable x
+MOV R0, 10
+STORE [x], R0
+
+; Declare variable y
+MOV R1, 5
+STORE [y], R1
+
+; Calculate x + y
+LOAD R2, [x]
+LOAD R3, [y]
+ADD R4, R2, R3
+STORE [sum], R4</code></pre>
+
+                        <p>This intermediate representation is a key characteristic of compilers, serving as a bridge between the high-level source code and the execution environment.</p>
+
+                        <h4>3. Symbol Table Management</h4>
+
+                        <p>The compiler maintains a sophisticated symbol table:</p>
+
+                        <ul>
+                            <li>Tracks variable names, types, and values</li>
+                            <li>Handles different data types (int, float, bool, string)</li>
+                            <li>Supports arrays with proper bounds checking</li>
+                            <li>Prevents variable redeclaration</li>
+                            <li>Ensures type compatibility in operations</li>
+                        </ul>
+
+                        <p>Example from the code:</p>
+                        <pre><code>this.symbolTable[varName] = {
+    type: node.dataType || 'int',
+    value: null
+};</code></pre>
+
+                        <h4>4. Type System</h4>
+
+                        <p>The compiler implements a strong type system:</p>
+
+                        <ul>
+                            <li>Supports basic types: int, float, bool, and string</li>
+                            <li>Performs type checking for operations</li>
+                            <li>Handles type conversions where appropriate</li>
+                            <li>Validates array operations and bounds</li>
+                            <li>Reports type-related errors with detailed messages</li>
+                        </ul>
+
+                        <h4>5. Error Handling</h4>
+
+                        <p>The compiler provides comprehensive error detection and reporting:</p>
+
+                        <ul>
+                            <li>Syntax errors with position information</li>
+                            <li>Semantic errors with detailed explanations</li>
+                            <li>Runtime error detection (e.g., division by zero)</li>
+                            <li>Helpful suggestions for fixing common errors</li>
+                            <li>Example error: "Variable 'x' already declared" or "Undefined variable 'y'"</li>
+                        </ul>
+
+                        <h4>6. Control Flow Analysis</h4>
+
+                        <p>The compiler properly handles control flow constructs:</p>
+
+                        <ul>
+                            <li>If-else statements with condition evaluation</li>
+                            <li>While and for loops with proper scoping</li>
+                            <li>Break statements with validation</li>
+                            <li>Nested control structures</li>
+                            <li>Label generation for jumps in the intermediate code</li>
+                        </ul>
+
+                        <h4>7. Optimization Techniques</h4>
+
+                        <p>While basic, the compiler does implement some optimizations:</p>
+
+                        <ul>
+                            <li>Constant folding for literal expressions</li>
+                            <li>Dead code elimination in conditional branches</li>
+                            <li>Efficient register allocation in the intermediate code</li>
+                        </ul>
+
+                        <h4>8. File Structure and Organization</h4>
+
+                        <p>The project is well-organized into modular components:</p>
+
+                        <ul>
+                            <li><strong>js/lexer.js</strong>: Tokenization and lexical analysis</li>
+                            <li><strong>js/parser.js</strong>: Syntax analysis and AST construction</li>
+                            <li><strong>js/semantic.js</strong>: Semantic analysis and validation</li>
+                            <li><strong>js/codegen.js</strong>: Code generation from AST</li>
+                            <li><strong>js/compiler.js</strong>: Main orchestration and UI integration</li>
+                            <li><strong>index.html</strong>: User interface for the compiler</li>
+                            <li><strong>css/</strong>: Styling for the compiler interface</li>
+                        </ul>
+
+                        <h4>9. Execution Model</h4>
+
+                        <p>The compiler follows a complete compilation process:</p>
+
+                        <ol>
+                            <li>Source code is fully analyzed before execution begins</li>
+                            <li>The entire program is transformed into an intermediate representation</li>
+                            <li>The intermediate code is then executed in a simulated environment</li>
+                            <li>Results are displayed after the compilation and execution process</li>
+                        </ol>
+
+                        <h4>Conclusion</h4>
+
+                        <p>The RG Compiler project is a legitimate compiler that transforms source code in the RG language into an executable intermediate representation. It implements all the essential phases of compilation: lexical analysis, syntax analysis, semantic analysis, and code generation. While it includes an integrated execution environment rather than generating standalone executables, this is a common approach for educational compilers and doesn't diminish its status as a true compiler.</p>
+
+                        <p>The project demonstrates a deep understanding of compiler construction principles and provides a valuable tool for learning about programming language implementation.</p>
+                        <pre><code>// Symbol Table
+// {
+//   "x": { type: "int", value: 5 },
+//   "y": { type: "float", value: 3.14 }
+// }</code></pre>
+
+                        <h5>4. Code Generation</h5>
+                        <p>The final phase transforms the AST into assembly-like intermediate code that can be executed. This code represents the operations to be performed by the computer.</p>
+                        <pre><code>; Declare variable x
+MOV R0, 5
+STORE [x], R0
+
+; Calculate x + 3
+LOAD R1, [x]
+ADD R2, R1, 3
+STORE [result], R2</code></pre>
+
+                        <h5>Execution Model</h5>
+                        <p>After compilation, the intermediate code is executed in a simulated environment, and the results are displayed in the output panel. This approach allows you to see both the compilation process and the execution results in one integrated environment.</p>
                     </section>
                 </div>
             </div>
