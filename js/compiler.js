@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const outputEl = document.getElementById('output');
     const errorsEl = document.getElementById('errors');
     const warningsEl = document.getElementById('warnings');
+    const compileStatusEl = document.getElementById('compileStatus') || document.createElement('div');
 
     // Tab buttons
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -256,21 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate runtime output
             let output = '';
             if (symbolTable.__output__ && symbolTable.__output__.length > 0) {
-                output = symbolTable.__output__.join('\n') + '\n\n';
+                output = symbolTable.__output__.join('\n');
             }
 
-            output += 'Variable Values:\n';
-            for (const [name, info] of Object.entries(symbolTable)) {
-                if (name !== '__output__' && name !== '__assembly__') {
-                    if (info.elements) {
-                        // Format array values
-                        output += `${name} (${info.type}) = [${info.elements.join(', ')}]\n`;
-                    } else {
-                        output += `${name} (${info.type}) = ${info.value}\n`;
-                    }
-                }
-            }
-
+            // Only show the program output, not the variable values
             outputEl.textContent = output || 'Program executed (no output generated)';
 
             // Switch to output tab
