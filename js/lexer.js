@@ -18,6 +18,15 @@ class Lexer {
             // Built-in functions (must come before IDENTIFIER)
             { type: 'PRINT', pattern: /^RG_Print\b/ },
 
+            // Advanced math functions (must come before IDENTIFIER)
+            { type: 'SQRT', pattern: /^sqrt\b/ },
+            { type: 'POW', pattern: /^pow\b/ },
+            { type: 'SIN', pattern: /^sin\b/ },
+            { type: 'COS', pattern: /^cos\b/ },
+            { type: 'TAN', pattern: /^tan\b/ },
+            { type: 'LOG', pattern: /^log\b/ },
+            { type: 'FACTORIAL', pattern: /^factorial\b/ },
+
             // Boolean literals (must come before IDENTIFIER)
             { type: 'TRUE', pattern: /^true\b/ },
             { type: 'FALSE', pattern: /^false\b/ },
@@ -36,15 +45,6 @@ class Lexer {
             { type: 'MULTIPLY', pattern: /^\*/ },
             { type: 'DIVIDE', pattern: /^\// },
             { type: 'MODULO', pattern: /^%/ },
-
-            // Advanced math functions
-            { type: 'SQRT', pattern: /^sqrt\b/ },
-            { type: 'POW', pattern: /^pow\b/ },
-            { type: 'SIN', pattern: /^sin\b/ },
-            { type: 'COS', pattern: /^cos\b/ },
-            { type: 'TAN', pattern: /^tan\b/ },
-            { type: 'LOG', pattern: /^log\b/ },
-            { type: 'FACTORIAL', pattern: /^factorial\b/ },
 
             // Comparison operators (order matters for <= and >=)
             { type: 'LESS_EQUAL', pattern: /^<=/ },
