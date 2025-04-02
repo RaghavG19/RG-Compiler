@@ -229,8 +229,6 @@ class CodeGenerator {
                 return `${node.name} = ${this.visitExpression(node.value)}`;
             case 'MathFunction':
                 return this.visitMathFunction(node);
-            case 'FunctionCall':
-                return this.visitFunctionCall(node);
             default:
                 throw new Error(`Unknown expression type: ${node.type}`);
         }
@@ -290,17 +288,6 @@ class CodeGenerator {
             default:
                 throw new Error(`Unknown math function: ${node.function}`);
         }
-    }
-
-    visitFunctionCall(node) {
-        // Get the function name
-        const funcName = node.name;
-
-        // Process all arguments
-        const args = node.args.map(arg => this.formatValue(this.visitExpression(arg)));
-
-        // Return the function call as a string
-        return `${funcName}(${args.join(', ')})`;
     }
 
     formatValue(value) {
