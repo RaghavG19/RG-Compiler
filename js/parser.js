@@ -478,9 +478,10 @@ class Parser {
             const arg = this.expression();
             this.consume('RPAREN', `Expect ) after ${func.value} argument`);
 
+            // Create a math function node with the appropriate function name and argument
             return {
                 type: 'MathFunction',
-                function: func.value,
+                function: func.value.toLowerCase(), // Convert to lowercase for consistency
                 argument: arg
             };
         } else if (this.match('POW')) {
@@ -490,6 +491,7 @@ class Parser {
             const exponent = this.expression();
             this.consume('RPAREN', 'Expect ) after pow arguments');
 
+            // Create a special pow function node with base and exponent
             return {
                 type: 'MathFunction',
                 function: 'pow',
@@ -499,27 +501,6 @@ class Parser {
         }
 
         return this.primary();
-    }
-
-    finishFunctionCall(name) {
-        // Parse function call arguments
-        this.consume('LPAREN', `Expect ( after ${name}`);
-
-        const args = [];
-        if (!this.check('RPAREN')) {
-            do {
-                args.push(this.expression());
-            } while (this.match('COMMA'));
-        }
-
-        this.consume('RPAREN', `Expect ) after ${name} arguments`);
-
-        // Create function call node
-        return {
-            type: 'FunctionCall',
-            name: name,
-            args: args
-        };
     }
 
     primary() {
@@ -553,11 +534,6 @@ class Parser {
 
         if (this.match('IDENTIFIER')) {
             const name = this.previous().value;
-
-            // Prevent control flow keywords from being treated as function calls
-            if (this.check('LPAREN') && name !== 'if' && name !== 'for' && name !== 'while') {
-                return this.finishFunctionCall(name);
-            }
 
             // Check if it's an array access
             if (this.match('LBRACKET')) {
