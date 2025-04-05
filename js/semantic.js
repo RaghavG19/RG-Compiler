@@ -971,7 +971,7 @@ class SemanticAnalyzer {
                 break;
 
             case '==':
-                this.symbolTable.__assembly__.push(`EQ R${this.varCount}, R${this.varCount-2}, R${this.varCount-1}`);
+                this.symbolTable.__assembly__.push(`EQ R${thAis.varCount}, R${this.varCount-2}, R${this.varCount-1}`);
                 result = left === right;
                 break;
 
