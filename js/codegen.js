@@ -227,6 +227,8 @@ class CodeGenerator {
                 return this.visitUnaryExpression(node);
             case 'AssignmentExpression':
                 return `${node.name} = ${this.visitExpression(node.value)}`;
+            case 'ArrayAssignmentExpression':
+                return `${node.array}[${this.visitExpression(node.index)}] = ${this.visitExpression(node.value)}`;
             case 'MathFunction':
                 return this.visitMathFunction(node);
             default:
